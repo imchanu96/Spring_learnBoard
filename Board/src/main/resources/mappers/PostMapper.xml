@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.Board.post.PostMapper">
+
+    <!-- tb_post 테이블 전체 컬럼 -->
+    <sql id="postColumns">
+        bNo
+        , bTitle
+        , bContent
+        , bWriter
+        , bView_cnt
+        , bNotice_yn
+        , bDelete_yn
+        , bCreated_date
+        , bModified_date
+    </sql>
+
+
+    <!-- 게시글 저장 -->
+    <insert id="save" parameterType="com.study.Board.post.PostRequest">
+        INSERT INTO board (
+        <include refid="postColumns" />
+        ) VALUES (
+        #{bNo}
+        , #{bTitle}
+        , #{bContent}
+        , #{bWriter}
+        , 0
+        , #{bNotice_yn}
+        , 0
+        , NOW()
+        , NULL
+        )
+    </insert>
+
+
+    <!-- 게시글 상세정보 조회 -->
+    <select id="findById" parameterType="integer" resultType="com.study.Board.post.PostResponse">
+        SELECT
+        <include refid="postColumns" />
+        FROM board
+        WHERE
+        bNo = #{value}
+    </select>
+
+
+    <!-- 게시글 수정 -->
+    <update id="update" parameterType="com.study.Board.post.PostRequest">
+        UPDATE board
+        SET
+        bModified_date = NOW()
+        , bTitle = #{bTitle}
+        , bContent = #{bContent}
+        , bWriter = #{bWriter}
+        , bNotice_yn = #{bNotice_yn}
+        WHERE
+        bNo = #{bNo}
+    </update>
+
+
+    <!-- 게시글 삭제 -->
+    <delete id="deleteById" parameterType="integer">
+        UPDATE board
+        SET bDelete_yn = 1
+        WHERE bNo = #{bNo}
+    </delete>
+
+
+    <!-- 게시글 리스트 조회 -->
+    <select id="findAll" resultType="com.study.Board.post.PostResponse">
+        SELECT
+        <include refid="postColumns" />
+        FROM board
+        WHERE bDelete_yn = 0
+        ORDER BY bNo DESC
+    </select>
+
+</mapper>
