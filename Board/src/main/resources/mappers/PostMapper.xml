@@ -16,9 +16,8 @@
         , bModified_date
     </sql>
 
-
     <!-- 게시글 저장 -->
-    <insert id="save" parameterType="com.study.Board.post.PostRequest">
+    <insert id="save" parameterType="com.study.Board.post.PostRequest" useGeneratedKeys="true" keyProperty="bNo">
         INSERT INTO board (
         <include refid="postColumns" />
         ) VALUES (
